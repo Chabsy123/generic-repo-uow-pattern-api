@@ -1,6 +1,12 @@
+using generic_repo_pattern_api.Repository;
+using generic_repo_uow_pattern_api.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
