@@ -1,12 +1,21 @@
+using generic_repo_pattern_api.Data;
 using generic_repo_pattern_api.Repository;
 using generic_repo_uow_pattern_api.Repository;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+builder.Services.AddDbContext<MyDbContext>(options =>
+{
+       options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
+});
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

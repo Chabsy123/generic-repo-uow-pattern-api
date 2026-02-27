@@ -24,6 +24,15 @@ namespace generic_repo_uow_pattern_api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("productbyname")]
+        public async Task<IActionResult> GetByName(string productName)
+        {
+            var productRepository = _unitOfWork.GetRepository<IProductRepository, Product>();
+            var result = await productRepository.GetProductsByName(productName);
+            //var product = await _unitOfWork.ProductRepository.GetProductsByName(productName);
+            return Ok(result);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Post(ProductRequest product)
