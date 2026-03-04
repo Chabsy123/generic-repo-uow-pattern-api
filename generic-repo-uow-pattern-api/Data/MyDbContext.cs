@@ -9,7 +9,7 @@ namespace generic_repo_pattern_api.Data
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<Blog> Blogs { get; set; }
-        public MyDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions) 
+        public MyDbContext(DbContextOptions<MyDbContext> dbContextOptions) : base(dbContextOptions) 
         {
             
         }

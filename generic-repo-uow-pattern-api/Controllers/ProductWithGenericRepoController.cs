@@ -58,7 +58,7 @@ namespace generic_repo_pattern_api.Controllers
             existingProduct.ProductName = product.ProductName;
             existingProduct.Price = product.Price;
             await productRepository.UpdateAsync(existingProduct);
-            return NoContent();
+            return Ok(existingProduct);
         }
 
         [HttpDelete("{id}")]
