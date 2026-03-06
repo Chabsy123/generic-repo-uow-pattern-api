@@ -3,6 +3,7 @@
 namespace generic_repo_uow_pattern_api.Common
 {
     public class PaginatedList<T> : List<T>
+        //makes it generic
     {
         public int CurrentPage { get; init; }
         public int TotalPages { get; init; }

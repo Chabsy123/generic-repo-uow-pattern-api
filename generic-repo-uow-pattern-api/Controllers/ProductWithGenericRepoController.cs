@@ -1,4 +1,5 @@
-﻿using generic_repo_pattern_api.Entity;
+﻿using AutoMapper;
+using generic_repo_pattern_api.Entity;
 using generic_repo_pattern_api.Repository;
 using generic_repo_pattern_api.ViewModel;
 using Microsoft.AspNetCore.Http;
@@ -12,15 +13,26 @@ namespace generic_repo_pattern_api.Controllers
     {
         private readonly IRepository<Product> productRepository;
 
-        public ProductWithGenericRepoController(IRepository<Product> productRepository)
+        private readonly IMapper _mapper;
+
+        public ProductWithGenericRepoController(IRepository<Product> productRepository, IMapper mapper)
         {
             this.productRepository = productRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
             var products = await productRepository.GetAllAsync();
+            return Ok(products);
+        }
+
+        [HttpGet("ProductsWithPagging")]
+        public async Task<IActionResult> ProductsWithPagging(int page = 1, int pageSize = 10, string searchTerm = null)
+        {
+            var products = await productRepository.GetAllAsync();
+            var productdto = _mapper.Map<List<ProductRequest>>(products);
             return Ok(products);
         }
 
@@ -32,19 +44,21 @@ namespace generic_repo_pattern_api.Controllers
             {
                 return NotFound();
             }
-            return Ok(product);
+            var productdto = _mapper.Map<ProductRequest>(product);
+            return Ok(productdto);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] ProductRequest product)
         {
-            var newProduct = new Product
-            {
-                ProductName = product.ProductName,
-                Price = product.Price
-            };
-            await productRepository.AddAsync(newProduct);
-            return CreatedAtAction(nameof(GetProductById), new { id = newProduct.ProductId }, newProduct);
+            //var newProduct = new Product
+            //{
+            //    ProductName = product.ProductName,
+            //    Price = product.Price
+            //};
+            var newProduct = _mapper.Map<Product>(product);
+            var createdProduct = await  _productRepository.AddAsync(newProduct);
+            return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.ProductId }, createdProduct);
         }
 
         [HttpPut("{id}")]
