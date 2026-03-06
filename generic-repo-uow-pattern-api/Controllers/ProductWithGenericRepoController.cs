@@ -57,7 +57,7 @@ namespace generic_repo_pattern_api.Controllers
             //    Price = product.Price
             //};
             var newProduct = _mapper.Map<Product>(product);
-            var createdProduct = await  _productRepository.AddAsync(newProduct);
+            var createdProduct = await productRepository.AddAsync(newProduct);
             return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.ProductId }, createdProduct);
         }
 
@@ -69,8 +69,9 @@ namespace generic_repo_pattern_api.Controllers
             {
                 return NotFound();
             }
-            existingProduct.ProductName = product.ProductName;
-            existingProduct.Price = product.Price;
+            //existingProduct.ProductName = product.ProductName;
+            //existingProduct.Price = product.Price;
+            _mapper.Map(product, existingProduct);
             await productRepository.UpdateAsync(existingProduct);
             return Ok(existingProduct);
         }

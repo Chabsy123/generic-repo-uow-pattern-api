@@ -49,10 +49,10 @@ namespace generic_repo_pattern_api.Repository
             return entity;
         }
 
-        Task IRepository<T>.AddAsync(T entity)
-        {
-            return AddAsync(entity);
-        }
+        //Task IRepository<T>.AddAsync(T entity)
+        //{
+        //    return AddAsync(entity);
+        //}
 
         public void SetDbContext(MyDbContext myDbcontext)
         {
