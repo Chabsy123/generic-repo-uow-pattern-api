@@ -27,5 +27,5 @@ namespace generic_repo_uow_pattern_api.Exception
             return true;
         }
     }
-    }
 }
+

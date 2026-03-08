@@ -81,7 +81,7 @@ namespace generic_repo_uow_pattern_api.Controllers
 
                 return StatusCode((int)HttpStatusCode.Created, new { Id = orderEntity.ProductId });
             }
-            catch (Exception)
+            catch (System.Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
