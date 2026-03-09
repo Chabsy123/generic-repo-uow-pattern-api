@@ -1,5 +1,7 @@
 ﻿
 using generic_repo_pattern_api.Data;
+using generic_repo_uow_pattern_api.Data;
+using generic_repo_uow_pattern_api.Repository;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -122,6 +124,21 @@ namespace generic_repo_pattern_api.Repository
             ICollection<T> result = await query.ToListAsync();
 
             return (result, totalNumber, totalPages ?? 0, isPrevious ?? false, isNext ?? false);
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(ISpecification<T> specification = null)
+        {
+            return ApplySpecificationforList(specification);
+        }
+
+        public async Task<T> FindAsync(ISpecification<T> specification = null)
+        {
+            return await ApplySpecificationforList(specification).FirstOrDefaultAsync();
+        }
+
+        private IQueryable<T> ApplySpecificationforList(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(_dbSet.AsQueryable(), spec);
         }
     }
 }
